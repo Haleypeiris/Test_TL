@@ -1,16 +1,107 @@
-local combat = Combat()
-combat:setParameter(COMBAT_PARAM_TYPE, COMBAT_ICEDAMAGE)
-combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_ICETORNADO)
-combat:setArea(createCombatArea(AREA_CIRCLE5X5))
+local combats = {}
+local delay = 700
+local areas = {
+	-- Area 1
+	{{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	 {0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
+	 {0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0},
+	 {0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0},
+	 {0, 0, 1, 0, 1, 2, 0, 1, 1, 0, 1},
+	 {0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0},
+	 {0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0},
+	 {0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
+	 {0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0},
+	 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},
 
-function onGetFormulaValues(player, level, magicLevel)
-	local min = (level / 5) + (magicLevel * 5.5) + 25
-	local max = (level / 5) + (magicLevel * 11) + 50
-	return -min, -max
+	-- Area 2
+	{{0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
+	 {0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
+	 {0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0},
+	 {0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0},
+	 {0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0},
+	 {1, 1, 1, 1, 1, 2, 1, 1, 0, 0, 1},
+	 {0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0},
+	 {0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0},
+	 {0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0},
+	 {0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0},
+	 {0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0}},
+
+	-- Area 3
+	{{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	 {0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0},
+	 {0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0},
+	 {0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0},
+	 {1, 1, 0, 1, 1, 2, 1, 1, 1, 1, 1},
+	 {0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0},
+	 {0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0},
+	 {0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0},
+	 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},
+
+	{{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},
+}
+
+--[[{0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
+--	 {0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0},
+--	 {0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0},
+--	 {0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0},
+--	 {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+--	 {1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1},
+--	 {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+--	 {0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0},
+--	 {0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0},
+--	 {0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0},
+--	 {0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0}]]
+
+--[[{
+--  {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+--	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+--	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+--	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+--	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+--	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+--	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+--	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+--	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+--	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+--	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},
+--}]]
+
+for i = 1, #areas do
+	combats[i] = Combat()
+	combats[i]:setParameter(COMBAT_PARAM_TYPE, COMBAT_ICEDAMAGE)
+	combats[i]:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_ICETORNADO )
+	combats[i]:setArea(createCombatArea(areas[i]))
+	function onGetFormulaValues(player, level, magicLevel)
+		local min = 0
+		local max = 0
+		return -min, -max
+	end
+
+	combats[i]:setCallback(CALLBACK_PARAM_LEVELMAGICVALUE, "onGetFormulaValues")
+end
+local function castSpell(creatureId, variant, combatIndex)
+	local creature = Creature(creatureId)
+	if creature then
+		combats[combatIndex]:execute(creature, variant)
+	end
 end
 
-combat:setCallback(CALLBACK_PARAM_LEVELMAGICVALUE, "onGetFormulaValues")
-
 function onCastSpell(creature, variant)
-	return combat:execute(creature, variant)
+	for i = 1, #areas do
+		addEvent(castSpell, (delay * i)-delay, creature:getId(), variant, i)
+	end
+	return combats[1]:execute(creature, variant)
 end
