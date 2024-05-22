@@ -5,7 +5,7 @@
 -- The random number generator would change each time a player starts the server, keeping the animation unique :)
 
 -- Area 1 could have been copied multiple times using a function but that would mean the amount of memory needed would
--- increase on cast. For low spec computers or phone, it would be better if he memory doesn't change when running a
+-- increase on cast. For low spec computers or phones, it would be better if the memory doesn't change when running a
 -- script. This is why there are 3 areas hardcoded.
 
 -- TODO: increase the animation speed to better replicate the video.
