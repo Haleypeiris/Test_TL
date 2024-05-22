@@ -59,11 +59,6 @@ for area, area_value in ipairs(areas) do
 end
 
 -- Cast spell multiple times with different areas
-function onGetFormulaValues(player, level, magicLevel)
-	local min = (level / 5) + (magicLevel * 5.5) + 25
-	local max = (level / 5) + (magicLevel * 11) + 50
-	return -min, -max
-end
 
 for i = 1, #areas do
 	combats[i] = Combat()
@@ -72,8 +67,8 @@ for i = 1, #areas do
 	combats[i]:setArea(createCombatArea(areas[i]))
 
 	function onGetFormulaValues(player, level, magicLevel)
-		local min = 0
-		local max = 0
+		local min = (level / 5) + (magicLevel * 5.5) + 25
+		local max = (level / 5) + (magicLevel * 11) + 50
 		return -min, -max
 	end
 	combats[i]:setCallback(CALLBACK_PARAM_LEVELMAGICVALUE, "onGetFormulaValues")
