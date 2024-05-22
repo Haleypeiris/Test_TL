@@ -60,8 +60,8 @@ end
 
 -- Cast spell multiple times with different areas
 function onGetFormulaValues(player, level, magicLevel)
-	local min = 0
-	local max = 0
+	local min = (level / 5) + (magicLevel * 5.5) + 25
+	local max = (level / 5) + (magicLevel * 11) + 50
 	return -min, -max
 end
 
