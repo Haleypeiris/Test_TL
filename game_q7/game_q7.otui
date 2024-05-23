@@ -1,0 +1,23 @@
+MainWindow
+  id: q7main
+  !text: tr('game_q7')
+  size: 600 600
+  @onEscape: modules.game_q7.closing()
+
+  TabBar
+    id: allTabs
+    anchors.top: parent.top
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
+
+  Panel
+    id: optionsTabContent
+    anchors.top: allTabs.top
+    anchors.left: allTabs.left
+    anchors.right: allTabs.right
+    anchors.bottom: allTabs.bottom
+    margin-top: 20
+    margin-bottom: 20
+
+	

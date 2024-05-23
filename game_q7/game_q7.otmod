@@ -1,0 +1,14 @@
+Module
+  name: game_q7
+  description: game_q7
+  author: test
+  website: -
+  version: 1
+
+  autoload: true
+  autoload-priority: 1000
+  sandboxed: true
+  dependencies: [ game_interface ]
+  scripts: [ game_q7 ]
+  @onLoad: init()
+  @onUnload: terminate()
